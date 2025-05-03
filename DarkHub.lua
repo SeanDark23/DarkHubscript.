@@ -8,17 +8,28 @@ accessGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 local accessFrame = Instance.new("Frame")
 accessFrame.Size = UDim2.new(0, 350, 0, 250)
 accessFrame.Position = UDim2.new(0.5, -175, 0.5, -125)
-accessFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+accessFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- black
 accessFrame.Parent = accessGui
+
+-- Fish background image
+local backgroundImage = Instance.new("ImageLabel")
+backgroundImage.Size = UDim2.new(1, 0, 1, 0)
+backgroundImage.Position = UDim2.new(0, 0, 0, 0)
+backgroundImage.Image = "rbxassetid://INSERT_IMAGE_ID_HERE" -- replace with your image ID
+backgroundImage.BackgroundTransparency = 1
+backgroundImage.ImageTransparency = 0.3
+backgroundImage.ZIndex = 0
+backgroundImage.Parent = accessFrame
 
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 0, 40)
 title.Position = UDim2.new(0, 0, 0, 0)
 title.BackgroundTransparency = 1
 title.Text = "DarkHub Access Required"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextColor3 = Color3.fromRGB(255, 0, 0) -- red
 title.Font = Enum.Font.SourceSansBold
 title.TextSize = 24
+title.ZIndex = 1
 title.Parent = accessFrame
 
 local instruction = Instance.new("TextLabel")
@@ -26,28 +37,28 @@ instruction.Size = UDim2.new(1, -20, 0, 80)
 instruction.Position = UDim2.new(0, 10, 0, 50)
 instruction.BackgroundTransparency = 1
 instruction.TextWrapped = true
-instruction.Text = "To access DarkHub, you must follow Roblox user '1423_matt'. Click below once followed."
-instruction.TextColor3 = Color3.fromRGB(200, 200, 200)
+instruction.Text = "To access DarkHub, follow Roblox user '1423_matt'. Click below once followed."
+instruction.TextColor3 = Color3.fromRGB(255, 255, 0) -- yellow
 instruction.Font = Enum.Font.SourceSans
 instruction.TextSize = 18
+instruction.ZIndex = 1
 instruction.Parent = accessFrame
 
 local confirmButton = Instance.new("TextButton")
 confirmButton.Size = UDim2.new(0.6, 0, 0, 40)
 confirmButton.Position = UDim2.new(0.2, 0, 1, -60)
 confirmButton.Text = "I Followed"
-confirmButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-confirmButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+confirmButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- red
+confirmButton.TextColor3 = Color3.fromRGB(255, 255, 0) -- yellow
 confirmButton.Font = Enum.Font.SourceSansBold
 confirmButton.TextSize = 20
+confirmButton.ZIndex = 1
 confirmButton.Parent = accessFrame
 
--- Function to check if the player follows 1423_matt
 local function isFollowing()
     local player = game.Players.LocalPlayer
     local followed = false
-    -- Check if the player is following 1423_matt
-    for _, playerFollowing in pairs(game.Players.LocalPlayer.Following:GetChildren()) do
+    for _, playerFollowing in pairs(player.Following:GetChildren()) do
         if playerFollowing.Name == "1423_matt" then
             followed = true
             break
@@ -56,11 +67,9 @@ local function isFollowing()
     return followed
 end
 
--- Function to load main DarkHub GUI
 function loadMainDarkHubGui()
     accessFrame:Destroy()
 
-    -- MAIN GUI
     local gui = Instance.new("ScreenGui")
     gui.Name = "DarkHubGui"
     gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -68,14 +77,14 @@ function loadMainDarkHubGui()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 350, 0, 480)
     frame.Position = UDim2.new(0.5, -175, 0.5, -240)
-    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- black
     frame.Parent = gui
 
     local title = Instance.new("TextLabel")
     title.Size = UDim2.new(1, 0, 0, 30)
     title.BackgroundTransparency = 1
     title.Text = "DarkHub"
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.TextColor3 = Color3.fromRGB(255, 0, 0) -- red
     title.Font = Enum.Font.SourceSansBold
     title.TextSize = 24
     title.Parent = frame
@@ -85,8 +94,8 @@ function loadMainDarkHubGui()
         button.Size = UDim2.new(1, -20, 0, 30)
         button.Position = UDim2.new(0, 10, 0, yPos)
         button.Text = name
-        button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.BackgroundColor3 = Color3.fromRGB(255, 255, 0) -- yellow
+        button.TextColor3 = Color3.fromRGB(0, 0, 0) -- black
         button.Font = Enum.Font.SourceSans
         button.TextSize = 18
         button.Parent = frame
@@ -165,7 +174,6 @@ function loadMainDarkHubGui()
         end
     end
 
-    -- Create Buttons
     createButton("Toggle Auto Fish", 40, function() DarkHub.ToggleAutoFish() end)
     createButton("Toggle Infinite Jump", 80, function() DarkHub.ToggleInfiniteJump() end)
     createButton("Toggle AutoFollow 1423_matt", 120, function() DarkHub.ToggleAutoFollow() end)
@@ -174,7 +182,7 @@ function loadMainDarkHubGui()
 end
 
 confirmButton.MouseButton1Click:Connect(function()
-    if isFollowing() or game.Players.LocalPlayer.Name == "1423_matt" then
+    if isFollowing() or game.Players.LocalPlayer.Name == "1423_matt" or tostring(game.Players.LocalPlayer.UserId) == "3586263253" then
         game:GetService("StarterGui"):SetCore("SendNotification", {
             Title = "Access Granted",
             Text = "Welcome to DarkHub!",
