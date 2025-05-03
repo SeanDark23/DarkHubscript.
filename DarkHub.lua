@@ -6,8 +6,8 @@ accessGui.Name = "DarkHubAccessGui"
 accessGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local accessFrame = Instance.new("Frame")
-accessFrame.Size = UDim2.new(0, 350, 0, 200)
-accessFrame.Position = UDim2.new(0.5, -175, 0.5, -100)
+accessFrame.Size = UDim2.new(0, 350, 0, 250)
+accessFrame.Position = UDim2.new(0.5, -175, 0.5, -125)
 accessFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 accessFrame.Parent = accessGui
 
@@ -26,7 +26,7 @@ instruction.Size = UDim2.new(1, -20, 0, 80)
 instruction.Position = UDim2.new(0, 10, 0, 50)
 instruction.BackgroundTransparency = 1
 instruction.TextWrapped = true
-instruction.Text = "To access DarkHub, you must follow Roblox user '1423_matt'. Click the button below once you have followed."
+instruction.Text = "To access DarkHub, you must follow Roblox user '1423_matt'. Click below once followed."
 instruction.TextColor3 = Color3.fromRGB(200, 200, 200)
 instruction.Font = Enum.Font.SourceSans
 instruction.TextSize = 18
@@ -42,6 +42,20 @@ confirmButton.Font = Enum.Font.SourceSansBold
 confirmButton.TextSize = 20
 confirmButton.Parent = accessFrame
 
+-- Function to check if the player follows 1423_matt
+local function isFollowing()
+    local player = game.Players.LocalPlayer
+    local followed = false
+    -- Check if the player is following 1423_matt
+    for _, playerFollowing in pairs(game.Players.LocalPlayer.Following:GetChildren()) do
+        if playerFollowing.Name == "1423_matt" then
+            followed = true
+            break
+        end
+    end
+    return followed
+end
+
 -- Function to load main DarkHub GUI
 function loadMainDarkHubGui()
     accessFrame:Destroy()
@@ -52,18 +66,18 @@ function loadMainDarkHubGui()
     gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 300, 0, 440)
-    frame.Position = UDim2.new(0, 50, 0, 50)
+    frame.Size = UDim2.new(0, 350, 0, 480)
+    frame.Position = UDim2.new(0.5, -175, 0.5, -240)
     frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     frame.Parent = gui
 
     local title = Instance.new("TextLabel")
     title.Size = UDim2.new(1, 0, 0, 30)
     title.BackgroundTransparency = 1
-    title.Text = "DarkHub (Fisch Edition)"
+    title.Text = "DarkHub"
     title.TextColor3 = Color3.fromRGB(255, 255, 255)
     title.Font = Enum.Font.SourceSansBold
-    title.TextSize = 22
+    title.TextSize = 24
     title.Parent = frame
 
     local function createButton(name, yPos, callback)
@@ -91,32 +105,6 @@ function loadMainDarkHubGui()
     local infiniteJumpEnabled = false
     local followEnabled = false
 
-    function DarkHub.SetLevel(level)
-        local player = game.Players.LocalPlayer
-        if player:FindFirstChild("leaderstats") then
-            local stat = player.leaderstats:FindFirstChild("Level")
-            if stat then
-                stat.Value = level
-                DarkHub.Notify("Level set to " .. level)
-            else
-                DarkHub.Notify("Level stat not found")
-            end
-        end
-    end
-
-    function DarkHub.SetMoney(amount)
-        local player = game.Players.LocalPlayer
-        if player:FindFirstChild("leaderstats") then
-            local stat = player.leaderstats:FindFirstChild("Money")
-            if stat then
-                stat.Value = amount
-                DarkHub.Notify("Money set to " .. amount)
-            else
-                DarkHub.Notify("Money stat not found")
-            end
-        end
-    end
-
     function DarkHub.ToggleAutoFish()
         autoFishEnabled = not autoFishEnabled
         if autoFishEnabled then
@@ -140,28 +128,6 @@ function loadMainDarkHubGui()
         end
     end
 
-    function DarkHub.SellAllFish()
-        local sellArea = workspace:FindFirstChild("SellArea")
-        if sellArea then
-            game.Players.LocalPlayer.Character:MoveTo(sellArea.Position)
-            DarkHub.Notify("Moved to Sell Area")
-            wait(2)
-            DarkHub.Notify("Attempted to sell fish")
-        else
-            DarkHub.Notify("Sell area not found")
-        end
-    end
-
-    function DarkHub.TeleportTo(pos)
-        local player = game.Players.LocalPlayer
-        if player.Character and player.Character.PrimaryPart then
-            player.Character:SetPrimaryPartCFrame(CFrame.new(pos))
-            DarkHub.Notify("Teleported to " .. tostring(pos))
-        else
-            DarkHub.Notify("Could not teleport")
-        end
-    end
-
     function DarkHub.ToggleInfiniteJump()
         infiniteJumpEnabled = not infiniteJumpEnabled
         if infiniteJumpEnabled then
@@ -174,22 +140,6 @@ function loadMainDarkHubGui()
         else
             DarkHub.Notify("Infinite Jump Disabled")
         end
-    end
-
-    function DarkHub.SetWalkSpeed(speed)
-        local human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
-        if human then
-            human.WalkSpeed = speed
-            DarkHub.Notify("WalkSpeed set to " .. speed)
-        end
-    end
-
-    function DarkHub.RedeemAllCodes()
-        local codes = {"WELCOME", "FREEFISH", "XPBOOST"}
-        for _, code in pairs(codes) do
-            print("Redeemed code:", code)
-        end
-        DarkHub.Notify("Redeemed all codes!")
     end
 
     function DarkHub.ToggleAutoFollow()
@@ -216,25 +166,26 @@ function loadMainDarkHubGui()
     end
 
     -- Create Buttons
-    createButton("Set Level to 50", 40, function() DarkHub.SetLevel(50) end)
-    createButton("Set Money to 1000", 80, function() DarkHub.SetMoney(1000) end)
-    createButton("Toggle Auto Fish", 120, function() DarkHub.ToggleAutoFish() end)
-    createButton("Sell All Fish", 160, function() DarkHub.SellAllFish() end)
-    createButton("Teleport to Spawn", 200, function() DarkHub.TeleportTo(Vector3.new(0,5,0)) end)
-    createButton("Teleport to Merchant", 240, function() DarkHub.TeleportTo(Vector3.new(100,5,100)) end)
-    createButton("Toggle Infinite Jump", 280, function() DarkHub.ToggleInfiniteJump() end)
-    createButton("Set WalkSpeed 32", 320, function() DarkHub.SetWalkSpeed(32) end)
-    createButton("Redeem All Codes", 360, function() DarkHub.RedeemAllCodes() end)
-    createButton("Toggle AutoFollow 1423_matt", 400, function() DarkHub.ToggleAutoFollow() end)
+    createButton("Toggle Auto Fish", 40, function() DarkHub.ToggleAutoFish() end)
+    createButton("Toggle Infinite Jump", 80, function() DarkHub.ToggleInfiniteJump() end)
+    createButton("Toggle AutoFollow 1423_matt", 120, function() DarkHub.ToggleAutoFollow() end)
 
-    DarkHub.Notify("DarkHub Loaded (Manual Mode)")
+    DarkHub.Notify("DarkHub Loaded (ForgeHub Style)")
 end
 
 confirmButton.MouseButton1Click:Connect(function()
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "Access Granted",
-        Text = "Welcome to DarkHub!",
-        Duration = 5;
-    })
-    loadMainDarkHubGui()
+    if isFollowing() or game.Players.LocalPlayer.Name == "1423_matt" then
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Access Granted",
+            Text = "Welcome to DarkHub!",
+            Duration = 5;
+        })
+        loadMainDarkHubGui()
+    else
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Follow First",
+            Text = "Please follow '1423_matt' to access DarkHub.",
+            Duration = 5;
+        })
+    end
 end)
